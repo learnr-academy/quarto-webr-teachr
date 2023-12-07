@@ -435,9 +435,9 @@ function enableWebRCodeCell(el)
     -- Check for the new engine syntax that allows for the cell to be 
     -- evaluated in VS Code or RStudio editor views, c.f.
     -- https://github.com/quarto-dev/quarto-cli/discussions/4761#discussioncomment-5336636
-    local newEngine = el.attr.classes:includes("{webr-r}")
+    local newEngine = el.attr.classes:includes("{webr-teachr}")
     
-    if (originalEngine or newEngine) then
+    if (newEngine) then
       
       -- Make sure we've initialized the code block
       ensureWebRSetup()
