@@ -1,6 +1,8 @@
 <div id="qwebr-interactive-area-{{WEBRCOUNTER}}" class="qwebr-interactive-area">
-  <button class="btn btn-default qwebr-button-run" disabled type="button" id="qwebr-button-run-{{WEBRCOUNTER}}">🟡 Loading
+  <button class="btn btn-default qwebr-button qwebr-button-run" disabled type="button" id="qwebr-button-run-{{WEBRCOUNTER}}">🟡 Loading
     webR...</button>
+  <button class="btn btn-default qwebr-button qwebr-button-check" disabled type="button" id="qwebr-button-check-{{WEBRCOUNTER}}">💡 Check answer</button>
+  <button class="btn btn-default qwebr-button qwebr-button-solve" type="button" id="qwebr-button-solve-{{WEBRCOUNTER}}">✅ Show solution</button>
   <div id="qwebr-console-area-{{WEBRCOUNTER}}" class="qwebr-console-area">
     <div id="qwebr-editor-{{WEBRCOUNTER}}" class="qwebr-editor"></div>
     <div id="qwebr-output-code-area-{{WEBRCOUNTER}}" class="qwebr-output-code-area" aria-live="assertive">
@@ -13,6 +15,8 @@
 <script type="module">
   // Retrieve webR code cell information
   const runButton = document.getElementById("qwebr-button-run-{{WEBRCOUNTER}}");
+  const checkButton = document.getElementById("qwebr-button-check-{{WEBRCOUNTER}}");
+  const solveButton = document.getElementById("qwebr-button-solve-{{WEBRCOUNTER}}");
   const outputCodeDiv = document.getElementById("qwebr-output-code-area-{{WEBRCOUNTER}}");
   const editorDiv = document.getElementById("qwebr-editor-{{WEBRCOUNTER}}");
   const outputGraphDiv = document.getElementById("qwebr-output-graph-area-{{WEBRCOUNTER}}");
@@ -121,12 +125,9 @@
   async function executeCode(codeToRun) {
 
     // Disallowing execution of other code cells
-    document.querySelectorAll(".qwebr-button-run").forEach((btn) => {
+    document.querySelectorAll(".qwebr-button-run, .qwebr-button-check").forEach((btn) => {
       btn.disabled = true;
     });
-
-    // Emphasize the active code cell
-    runButton.innerHTML = '<i class="fa-solid fa-spinner fa-spin qwebr-icon-status-spinner"></i> <span>Run Code</span>';
 
     // Create a canvas variable for graphics
     let canvas = undefined;
@@ -263,16 +264,25 @@
     }
 
     // Switch to allowing execution of code
-    document.querySelectorAll(".qwebr-button-run").forEach((btn) => {
+    document.querySelectorAll(".qwebr-button-run, .qwebr-button-check").forEach((btn) => {
       btn.disabled = false;
     });
-
+    
     // Revert to the initial code cell state
     runButton.innerHTML = '<i class="fa-solid fa-play qwebr-icon-run-code"></i> <span>Run Code</span>';
+    checkButton.innerHTML = '💡 Check answer';
   }
 
   // Add a click event listener to the run button
   runButton.onclick = function () {
+    // Emphasize the active code cell
+    runButton.innerHTML = '<i class="fa-solid fa-spinner fa-spin qwebr-icon-status-spinner"></i> <span>Run Code</span>';
     executeCode(editor.getValue());
+  };
+  
+  checkButton.onclick = function () {
+    // Emphasize the active code cell
+    checkButton.innerHTML = '<i class="fa-solid fa-spinner fa-spin qwebr-icon-status-spinner"></i> <span>Check answer</span>';
+    executeCode("check(\"" + editor.getValue() + "\")");
   };
 </script>

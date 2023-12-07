@@ -25,7 +25,7 @@
     border: 1px solid #EEEEEE;
   }
 
-  .qwebr-button-run {
+  .qwebr-button {
     background-color: #EEEEEE;
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0; /* Extra styling for consistency */
@@ -50,13 +50,13 @@
     transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
   }
 
-  .qwebr-button-run:hover {
+  .qwebr-button:hover {
     color: #000;
     background-color: #e3e6ea;
     border-color: #e1e5e9;
   }
 
-  .qwebr-button-run:disabled,.qwebr-button-run.disabled,fieldset:disabled .qwebr-button-run {
+  .qwebr-button:disabled,.qwebr-button.disabled,fieldset:disabled .qwebr-button {
     pointer-events: none;
     opacity: .65
   }
@@ -211,6 +211,9 @@
   function qwebrSetInteractiveButtonState(buttonText, enableCodeButton = true) {
     document.querySelectorAll(".qwebr-button-run").forEach((btn) => {
       btn.innerHTML = buttonText;
+      btn.disabled = !enableCodeButton;
+    });
+    document.querySelectorAll(".qwebr-button-check").forEach((btn) => {
       btn.disabled = !enableCodeButton;
     });
   }
