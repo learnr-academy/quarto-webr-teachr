@@ -285,4 +285,8 @@
     checkButton.innerHTML = '<i class="fa-solid fa-spinner fa-spin qwebr-icon-status-spinner"></i> <span>Check answer</span>';
     executeCode("check(\"" + editor.getValue() + "\")");
   };
+  
+  solveButton.onclick = function () {
+    editor.setValue("fit <- lm(mpg ~ am, data = mtcars)\n\nsummary(fit)");
+  };
 </script>
