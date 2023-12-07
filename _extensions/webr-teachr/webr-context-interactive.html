@@ -3,6 +3,7 @@
     webR...</button>
   <button class="btn btn-default qwebr-button qwebr-button-check" disabled type="button" id="qwebr-button-check-{{WEBRCOUNTER}}">💡 Check answer</button>
   <button class="btn btn-default qwebr-button qwebr-button-solve" type="button" id="qwebr-button-solve-{{WEBRCOUNTER}}">✅ Show solution</button>
+  <button class="btn btn-default qwebr-button qwebr-button-reset" type="button" id="qwebr-button-reset-{{WEBRCOUNTER}}">💥 Reset code</button>
   <div id="qwebr-console-area-{{WEBRCOUNTER}}" class="qwebr-console-area">
     <div id="qwebr-editor-{{WEBRCOUNTER}}" class="qwebr-editor"></div>
     <div id="qwebr-output-code-area-{{WEBRCOUNTER}}" class="qwebr-output-code-area" aria-live="assertive">
@@ -17,6 +18,7 @@
   const runButton = document.getElementById("qwebr-button-run-{{WEBRCOUNTER}}");
   const checkButton = document.getElementById("qwebr-button-check-{{WEBRCOUNTER}}");
   const solveButton = document.getElementById("qwebr-button-solve-{{WEBRCOUNTER}}");
+  const resetButton = document.getElementById("qwebr-button-reset-{{WEBRCOUNTER}}");
   const outputCodeDiv = document.getElementById("qwebr-output-code-area-{{WEBRCOUNTER}}");
   const editorDiv = document.getElementById("qwebr-editor-{{WEBRCOUNTER}}");
   const outputGraphDiv = document.getElementById("qwebr-output-graph-area-{{WEBRCOUNTER}}");
@@ -290,5 +292,7 @@
     editor.setValue(`{{WEBRSOLUTION}}`);
   };
   
+  resetButton.onclick = function () {
+    editor.setValue(`{{WEBRCODE}}`);
   };
 </script>
