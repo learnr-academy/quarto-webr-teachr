@@ -269,14 +269,14 @@
     });
     
     // Revert to the initial code cell state
-    runButton.innerHTML = '<i class="fa-solid fa-play qwebr-icon-run-code"></i> <span>Run Code</span>';
+    runButton.innerHTML = '<i class="fa-solid fa-play qwebr-icon-run-code"></i> <span>Run code</span>';
     checkButton.innerHTML = '💡 Check answer';
   }
 
   // Add a click event listener to the run button
   runButton.onclick = function () {
     // Emphasize the active code cell
-    runButton.innerHTML = '<i class="fa-solid fa-spinner fa-spin qwebr-icon-status-spinner"></i> <span>Run Code</span>';
+    runButton.innerHTML = '<i class="fa-solid fa-spinner fa-spin qwebr-icon-status-spinner"></i> <span>Run code</span>';
     executeCode(editor.getValue());
   };
   
@@ -287,6 +287,8 @@
   };
   
   solveButton.onclick = function () {
-    editor.setValue("fit <- lm(mpg ~ am, data = mtcars)\n\nsummary(fit)");
+    editor.setValue(`{{WEBRSOLUTION}}`);
+  };
+  
   };
 </script>

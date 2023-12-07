@@ -238,6 +238,42 @@ function escapeControlSequences(str)
   end)
 end
 
+-- Define a function to replace solutions with blanks
+function hideSolution(str)
+  ans = {}
+  j = 0
+  i = 0
+  while i ~= nil do
+    i,_ = str:find("<<", j, true)
+    if i == nil then 
+      table.insert(ans, string.sub(str, j+1, str:len(str)))
+      break
+    end
+    table.insert(ans, string.sub(str, j+1, i-1))
+    _,j = str:find(">>", i, true)
+    table.insert(ans, "___")
+  end
+  return escapeControlSequences(table.concat(ans))
+end
+
+-- Define a function to show the solutions
+function showSolution(str)
+  ans = {}
+  j = 0
+  i = 0
+  while i ~= nil do
+    i,_ = str:find("<<", j, true)
+    if i == nil then 
+      table.insert(ans, string.sub(str, j+1, str:len(str)))
+      break
+    end
+    table.insert(ans, string.sub(str, j+1, i-1))
+    _,j = str:find(">>", i, true)
+    table.insert(ans, string.sub(str, i+2,j-2))
+  end
+  return escapeControlSequences(table.concat(ans))
+end
+
 -- Check if version is latest
 function isLatestVersion(str)
   return str == "latest"
@@ -457,7 +493,8 @@ function enableWebRCodeCell(el)
         ["WEBRCOUNTER"] = counter, 
         ["WIDTH"] = 504,
         ["HEIGHT"] = 360,
-        ["WEBRCODE"] = escapeControlSequences(el.text)
+        ["WEBRCODE"] = hideSolution(el.text),
+        ["WEBRSOLUTION"] = showSolution(el.text)
       }
       
       -- Retrieve the newly defined attributes
