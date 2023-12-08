@@ -285,6 +285,8 @@
   // Setup answer checking functions
   await globalThis.webR.evalRVoid(
 `.printed <- list()
+.errored <- character()
+.warned <- character()
 print <- function(x, ...) {
   .printed[[length(.printed) + 1]] <<- x
   base:::print(x, ...)
@@ -303,9 +305,9 @@ capture_printed <- function(x) {
 }
 
 check_answer <- function(.code) {
-  .printed <- list()
-  .errored <- character()
-  .warned <- character()
+  .printed <<- list()
+  .errored <<- character()
+  .warned <<- character()
   .code <- as.expression(lapply(parse(text = .code), function(l) call("capture_printed", l)))
   eval(.code, envir = .GlobalEnv)
   results <- teachr_tests(.code, .printed, .errored, .warned)
