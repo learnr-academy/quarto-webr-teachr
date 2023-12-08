@@ -289,7 +289,7 @@
 `teachr_tests <- function(.code, .printed, .errored, .warned) {
   {{WEBRTESTS}}
 }
-check_answer("` + editor.getValue() + `")`
+check_answer(r"(` + editor.getValue() + `)")`
     );
   };
   
