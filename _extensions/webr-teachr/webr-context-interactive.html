@@ -22,12 +22,13 @@
   const outputCodeDiv = document.getElementById("qwebr-output-code-area-{{WEBRCOUNTER}}");
   const editorDiv = document.getElementById("qwebr-editor-{{WEBRCOUNTER}}");
   const outputGraphDiv = document.getElementById("qwebr-output-graph-area-{{WEBRCOUNTER}}");
+  const webrCode = `{{WEBRCODE}}`
 
   // Load the Monaco Editor and create an instance
   let editor;
   require(['vs/editor/editor.main'], function () {
     editor = monaco.editor.create(editorDiv, {
-      value: `{{WEBRCODE}}`,
+      value: webrCode,
       language: 'r',
       theme: 'vs-light',
       automaticLayout: true,           // TODO: Could be problematic for slide decks
@@ -298,6 +299,6 @@ check_answer(r"(` + editor.getValue() + `)")`
   };
   
   resetButton.onclick = function () {
-    editor.setValue(`{{WEBRCODE}}`);
+    editor.setValue(webrCode);
   };
 </script>
