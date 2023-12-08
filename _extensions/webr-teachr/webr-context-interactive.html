@@ -285,7 +285,12 @@
   checkButton.onclick = function () {
     // Emphasize the active code cell
     checkButton.innerHTML = '<i class="fa-solid fa-spinner fa-spin qwebr-icon-status-spinner"></i> <span>Check answer</span>';
-    executeCode("check(\"" + editor.getValue() + "\")");
+    executeCode(
+`teachr_tests <- function(.code, .printed, .errored, .warned) {
+  {{WEBRTESTS}}
+}
+check_answer("` + editor.getValue() + `")`
+    );
   };
   
   solveButton.onclick = function () {

@@ -281,6 +281,42 @@
       await qwebrProcessRPackagesWithStatus(uniqueRPackageList, 'load', showStartupMessage);
     }
   }
+  
+  // Setup answer checking functions
+  await globalThis.webR.evalRVoid(
+`.printed <- list()
+print <- function(x, ...) {
+  .printed[[length(.printed) + 1]] <<- x
+  base:::print(x, ...)
+}
+capture_printed <- function(x) {
+  x_vis <- withVisible(
+    tryCatch(x, 
+      error = function(e) {
+        message("Error: ", e$message)
+        .errored[[length(.errored) + 1]] <<- e$message
+      },
+      finally = list(visible = FALSE, value = NULL)
+    )
+  )
+  if(x_vis$visible) print(x_vis$value) else invisible()
+}
+
+check_answer <- function(.code) {
+  .printed <- list()
+  .errored <- character()
+  .warned <- character()
+  .code <- as.expression(lapply(parse(text = .code), function(l) call("capture_printed", l)))
+  eval(.code, envir = .GlobalEnv)
+  results <- teachr_tests(.code, .printed, .errored, .warned)
+  if(all(results)) {
+    cat("✅ That's correct! Well done 🎉", "\n", sep = "", file = stdout(), append = TRUE)
+  } else {
+    cat("❌ That's incorrect! Please try again...", "\n", sep = "", file = stdout(), append = TRUE)
+  }
+  invisible()
+}`
+  );
 
   // Stop timer
   const initializeWebRTimerEnd = performance.now();

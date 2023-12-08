@@ -420,6 +420,17 @@ function extractCodeBlockOptions(block)
   --  the block's code lines
   local newAttributes = {}
   local newCodeLines = {}
+  
+  
+  -- Split question code from checks with ??? line separator
+  i,j = code:find("\n%?%?%?%s*\n")
+  newAttributes["enable-teachr-tests"] = true
+  if i == nil then
+    newAttributes["teachrTests"] = 'TRUE'
+  else
+    newAttributes["teachrTests"] = code:sub(j, code:len())
+    code = code:sub(0, i)
+  end
 
   -- Iterate over each line in the code block 
   for line in code:gmatch("([^\r\n]*)[\r\n]?") do
@@ -494,7 +505,8 @@ function enableWebRCodeCell(el)
         ["WIDTH"] = 504,
         ["HEIGHT"] = 360,
         ["WEBRCODE"] = hideSolution(el.text),
-        ["WEBRSOLUTION"] = showSolution(el.text)
+        ["WEBRSOLUTION"] = showSolution(el.text),
+        ["WEBRTESTS"] = el.attributes.teachrTests
       }
       
       -- Retrieve the newly defined attributes
