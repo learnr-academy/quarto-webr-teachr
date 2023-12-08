@@ -311,10 +311,11 @@ check_answer <- function(.code) {
   .code <- as.expression(lapply(parse(text = .code), function(l) call("capture_printed", l)))
   eval(.code, envir = .GlobalEnv)
   results <- teachr_tests(.code, .printed, .errored, .warned)
-  if(all(results)) {
+  if(all(!results)) {
     cat("✅ That's correct! Well done 🎉", "\n", sep = "", file = stdout(), append = TRUE)
   } else {
     cat("❌ That's incorrect! Please try again...", "\n", sep = "", file = stdout(), append = TRUE)
+    cat(paste("•", names(results)[results]), sep = "\n", file = stdout(), append = TRUE)
   }
   invisible()
 }`
