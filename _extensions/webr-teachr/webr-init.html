@@ -309,6 +309,7 @@ check_answer <- function(.code) {
   .printed <<- list()
   .errored <<- character()
   .warned <<- character()
+  .src <- .code
   .code <- as.expression(lapply(parse(text = .code), function(l) call("capture_printed", l)))
   eval(.code, envir = .GlobalEnv)
   results <- teachr_tests(.code, .printed, .errored, .warned)
