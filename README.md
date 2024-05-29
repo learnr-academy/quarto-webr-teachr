@@ -1,79 +1,79 @@
-# webR Extension for Quarto
+# webR teachr extension for Quarto
 
-This extension enables the [webR](https://docs.r-wasm.org/webr/latest/) code cell within various [Quarto](https://quarto.org/) formats, including [HTML](https://quarto.org/docs/output-formats/html-basics.html), [RevealJS](https://quarto.org/docs/presentations/revealjs/), [Websites](https://quarto.org/docs/websites/), [Blogs](https://quarto.org/docs/websites/website-blog.html), and [Books](https://quarto.org/docs/books). 
+This extension enables the [webR](https://docs.r-wasm.org/webr/latest/) code cell within various [Quarto](https://quarto.org/) formats, along with tools for checking that the code achieved a specific goal.
 
-![`quarto-webr` Filter in Action](https://i.imgur.com/JIQZIZ8.gif)
+It is a fork of the quarto-webr extension, and all of the documentation for this extension also applies here. Most of the documentation for using webr with quarto can be found here: https://github.com/coatless/quarto-webr
 
-Take a look at a live example of the extension in action [here](https://quarto-webr.thecoatlessprofessor.com/examples/readme)! To delve deeper into the extension's capabilities, see our comprehensive [documentation website](https://quarto-webr.thecoatlessprofessor.com/).
+# Installation
 
-## Background
+To use this extension in a Quarto project, install it from within the project's working directory by typing into Terminal:
 
-If you're new to [webR](https://docs.r-wasm.org/webr/latest/), this cutting-edge technology empowers you to:
-
-> "run R code in the browser without the need for an R server to execute the code."
-
-For a deeper understanding of [webR](https://docs.r-wasm.org/webr/latest/), explore the following resources:
-
-- [webR Documentation](https://docs.r-wasm.org/webr/latest/)
-- [webR Source Code](https://github.com/r-wasm/webr/)
-
-## Installation 
-
-To use this extension in a Quarto project, install it from within the project's working directory by typing into **Terminal**:
-
-``` bash
-quarto add coatless/quarto-webr
+```
+quarto add learnr-academy/quarto-webr-teachr
 ```
 
-![Demonstration of using the Terminal tab to install the extension.](https://i.imgur.com/aVuBdyN.png)
+# Usage
 
-After the installation process is finished, the extension will be readily available for Quarto documents within the designated working directory. Please note that if you are working on projects located in different directories, you will need to repeat this installation step for each of those directories.
-
-## Usage
-
-For each document, place the `webr` filter in the document's header:
+For each document, place the webr filter in the document's header:
 
 ```yaml
 filters:
-  - webr
+  - webr-teachr
 ```
 
-Then, place the R code for `webR` in a code block marked with `{webr-r}`
 
-````markdown
+
+````
 ---
 title: webR in Quarto HTML Documents
 format: html
 engine: knitr
 filters:
-  - webr
+  - webr-teachr
 ---
 
-This is a webR-enabled code cell in a Quarto HTML document.
+This is a webR teachr enabled code cell in a Quarto HTML document.
 
-```{webr-r}
-fit = lm(mpg ~ am, data = mtcars)
+```{webr-teachr}
+# Write some code to roll a die
 
-summary(fit)
+roll_a_die <- <<function(){sample(1:6, size = 1)}>>
+
+???
+
+rolls <- vapply(seq_len(1000), function(x) roll_a_die(), integer(1L))
+c(
+  "Your function should return an integer" = !is.integer(rolls),
+  "Your function returns dice numbers less than 1." = min(rolls) < 1L,
+  "Your function returns dice numbers more than 6." = max(rolls) > 6L
+  
+)
 ```
 ````
 
-The rendered document can be viewed online [here](https://quarto-webr.thecoatlessprofessor.com/examples/readme).
+![Video of the above teachr code cell being used](teachr-demo.gif)
 
- **Note:** If you don't specify the `engine: knitr`, the default compute engine used will be `jupyter`. This could trigger prompts to install Python. However, if you specify `engine: knitr`, there's no need to install Python.
+The displayed code and answer checking within a webr-teachr chunk is separated by `???`.
 
-There are many more customization options that are available. Please see the [customization documentation](https://quarto-webr.thecoatlessprofessor.com/qwebr-meta-options.html) for more examples.
+## The code cell contents
 
-For specific deployment usage cases, please see [Templates](https://quarto-webr.thecoatlessprofessor.com/qwebr-deployment-templates.html). 
+Code fenced by `<<>>` will be treated as fill in the blank exercises, where their contents are hidden on the website but shown when the `✅ Show solution` button is pressed. The code can be reset to its initial state by pressing `💥 Reset code`.
 
-## Help
+## Checking code
 
-For troubleshooting help, please see our [troubleshooting page](https://quarto-webr.thecoatlessprofessor.com/qwebr-troubleshooting.html).
+The `💡 Check answer` button will run the tests specified below the `???` separator.
 
-To report a bug, please [add an issue](https://github.com/coatless/quarto-webr/issues/new) to the repository's [bug tracker](https://github.com/coatless/quarto-webr/issues).
+This button will first run all of the user's code, and then run the code below the separator.
 
-Want to contribute a feature? Please open an issue ticket to discuss the feature before sending a pull request. 
+The last value should be a named logical vector (you can also use `return()` to stop checking earlier and give hints).
 
-## Acknowledgements
+The names of this logical vector are the hints which are shown when the test returns `TRUE`. In the example above, `min(rolls) < 1L` was TRUE since the user sampled between 0 and 6. As a result, the helpful hint of `"Your function returns dice numbers less than 1."` was returned.
 
-Please see our [acknowledgements page](https://quarto-webr.thecoatlessprofessor.com/qwebr-acknowledgements.html).
+These tests have access to:
+
+* user defined objects (such as the `roll_a_die` function shown above)
+* any printed objects which are stored in the `.printed` list
+* any error messages which are stored in the `.errored` character vector
+* any warning messages which are stored in the `.warned` character vector
+* the user's unparsed source code, available in the `.src` object
+* the user's parsed code, available in the `.code` expression
