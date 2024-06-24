@@ -77,3 +77,10 @@ These tests have access to:
 * any warning messages which are stored in the `.warned` character vector
 * the user's unparsed source code, available in the `.src` object
 * the user's parsed code, available in the `.code` expression
+
+
+There are some helpful functions included to make it easier to check user code and output.
+
+* `search_ast(.code, .fn = NULL, ..., .expr = NULL)`
+  
+  This function searches the AST passed in via `.code` and returns TRUE if both the function `.fn` is used with the arguments in `...`. For example if the user code is `expression(data |> mutate(log(Sales)))`, `search_ast(.code, .fn = mutate)` will return `TRUE` since the function `mutate` was used. `search_ast(.code, .fn = NULL, log(Sales))` will also return `TRUE` since the argument `log(Sales)` is used, notice that not all arguments need to be matched (`data` is not checked here). `search_ast(.code, .fn = mutate, log(Sales), data)` also returns `TRUE`, it searches for both function and arguments being used together, note that the arguments can appear in any order but argument names must match. An alternative compact approach to testing both functions and arguments is using `.expr`, `search_ast(.code, .expr = mutate(data, log(Sales)))` is equivalent to `search_ast(.code, .fn = mutate, data, log(Sales))`.
