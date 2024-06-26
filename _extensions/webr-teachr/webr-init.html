@@ -335,6 +335,15 @@ search_ast <- function(.code, .fn = NULL, ..., .expr = NULL) {
   any(vapply(.code, search_ast_impl, logical(1L), fn = .fn, fn_args = fn_args))
 }
 
+exists_in <- function(.x, .f, ..., .require = any) {
+  if(inherits(.f, "formula")) {
+    f <- .f
+    .f <- function(.x, .y, ..., . = .x) {}
+    body(.f) <- f[[length(f)]]
+  }
+  .require(vapply(.x, .f, logical(1L), ...))
+}
+
 check_answer <- function(.code) {
   .printed <<- list()
   .errored <<- character()

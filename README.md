@@ -84,3 +84,7 @@ There are some helpful functions included to make it easier to check user code a
 * `search_ast(.code, .fn = NULL, ..., .expr = NULL)`
   
   This function searches the AST passed in via `.code` and returns TRUE if both the function `.fn` is used with the arguments in `...`. For example if the user code is `expression(data |> mutate(log(Sales)))`, `search_ast(.code, .fn = mutate)` will return `TRUE` since the function `mutate` was used. `search_ast(.code, .fn = NULL, log(Sales))` will also return `TRUE` since the argument `log(Sales)` is used, notice that not all arguments need to be matched (`data` is not checked here). `search_ast(.code, .fn = mutate, log(Sales), data)` also returns `TRUE`, it searches for both function and arguments being used together, note that the arguments can appear in any order but argument names must match. An alternative compact approach to testing both functions and arguments is using `.expr`, `search_ast(.code, .expr = mutate(data, log(Sales)))` is equivalent to `search_ast(.code, .fn = mutate, data, log(Sales))`.
+  
+* `exists_in(.x, .f, ..., .require = any)`
+  
+  This function is useful for checking if `any` (or `all` via `.require`) of the `.printed` objects (or warnings in `.warned` and errors in `.errored`) satisfy the condition `.f`. This is useful to check printed output since the code might produce many printed objects in any order. For example, to check if a `data.frame` was printed you could use `exists_in(.printed, is.data.frame)`. 
